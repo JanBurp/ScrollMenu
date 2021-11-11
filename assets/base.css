@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap&subset=latin-ext");
+
+body {
+    --color-text: #111;
+    --color-bg: #fff;
+    --color-link: #FF364C;
+    --color-link-hover: #000;
+    --color-menu: #000;
+    --color-menu-hover: #c0092b;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "Bree Serif", serif;
+}
+
+@media screen and (min-width: 53em) {
+    .frame {
+        background: none;
+        display: grid;
+        grid-template-areas: 'title button'
+							'links ...';
+        padding: 3rem 4rem;
+        pointer-events: none;
+    }
+    .frame__links {
+        margin: 3rem 0 2rem;
+        grid-area: links;
+        justify-self: start;
+    }
+    .frame__links a {
+        display: block;
+        pointer-events: auto;
+    }
+    .frame__button {
+        grid-area: button;
+        justify-self: end;
+    }
+}
