@@ -36,8 +36,7 @@ ul.jeg_main_menu {
 }
 
 
-/*.jeg_main_menu > li.menu-item.current-menu-item>a,*/
-.jeg_main_menu > li.menu-item>a:hover {
+.jeg_main_menu > li.active-menu-item>a {
     transform: scale(1.5);
     box-shadow: 0px 0px 10px #DDD;
 }
