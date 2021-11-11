@@ -107,7 +107,7 @@ class ScrollMenu {
         let self = this;
         this.timer = setTimeout(function(){
             self.scrollBack(self);
-        }, 2000);
+        }, 3000);
     }
 
     resetWaitTimer() {
