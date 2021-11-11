@@ -85,8 +85,4 @@ ul.jeg_main_menu {
     .menu-item {
         margin-right: 25vw;
     }
-    .jeg_main_menu > li.menu-item>a {
-        /*padding: 1vh 0;*/
-        /*font-size: 9.5vh;*/
-    }
 }
