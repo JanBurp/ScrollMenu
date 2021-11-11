@@ -1,15 +1,29 @@
 class ScrollMenu {
 
     constructor(el) {
-        this.DOM = {el: el};
+        this.DOM = {wrapper: el};
+        this.DOM.el = this.DOM.wrapper.querySelector('ul');
         this.DOM.menuItems = [...this.DOM.el.querySelectorAll('.menu-item')];
-        this.DOM.menuItems.forEach( (item, index) => item.classList.add('item-'+(index+1)) );
 
+        this.prepareDOM();
         this.cloneItems();
         this.initScroll();
         this.initEvents();
 
         this.render();
+    }
+
+    prepareDOM() {
+        // transparent blocks on top and bottom
+        var top = document.createElement("div");
+        top.classList.add('top');
+        this.DOM.wrapper.appendChild(top);
+        var bottom = document.createElement("div");
+        bottom.classList.add('bottom');
+        this.DOM.wrapper.appendChild(bottom);
+
+        // items a unique class
+        this.DOM.menuItems.forEach( (item, index) => item.classList.add('item-'+(index+1)) );
     }
 
     initEvents() {
