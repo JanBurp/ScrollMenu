@@ -4,6 +4,7 @@ class ScrollMenu {
         this.DOM = {wrapper: el};
         this.DOM.el = this.DOM.wrapper.querySelector('ul');
         this.DOM.menuItems = [...this.DOM.el.querySelectorAll('.menu-item')];
+        this.DOM.currentItem = this.DOM.el.querySelector('.current-menu-item');
 
         this.prepareDOM();
         this.cloneItems();
@@ -11,6 +12,16 @@ class ScrollMenu {
         this.initEvents();
 
         this.render();
+    }
+
+    initEvents() {
+        this.timer = false;
+        window.addEventListener('resize', () => this.resize());
+    }
+
+    resize() {
+        this.cloneItems();
+        this.initScroll();
     }
 
     prepareDOM() {
@@ -24,15 +35,6 @@ class ScrollMenu {
 
         // items a unique class
         this.DOM.menuItems.forEach( (item, index) => item.classList.add('item-'+(index+1)) );
-    }
-
-    initEvents() {
-        window.addEventListener('resize', () => this.resize());
-    }
-
-    resize() {
-        this.cloneItems();
-        this.initScroll();
     }
 
     cloneItems() {
@@ -60,6 +62,7 @@ class ScrollMenu {
     initScroll() {
         // Scroll 1 pixel to allow upwards scrolling
         this.scrollPos = this.getScrollPos();
+        this.prevScrollPos = this.scrollPos;
         if (this.scrollPos <= 0) {
             this.setScrollPos(1);
         }
@@ -86,11 +89,42 @@ class ScrollMenu {
             this.setScrollPos(this.scrollHeight - this.clonesHeight);
         }
 
+        // Scroll back to current item when scrolling stoppped
+        if ( this.prevScrollPos==this.scrollPos) {
+            if ( this.timer===false ) {
+                this.startWaitTimer();
+            }
+        }
+        else {
+            this.resetWaitTimer();
+        }
+        this.prevScrollPos = this.scrollPos;
+
         this.updateActiveItem();
     }
 
+    startWaitTimer() {
+        let self = this;
+        this.timer = setTimeout(function(){
+            self.scrollBack(self);
+        }, 2000);
+    }
+
+    resetWaitTimer() {
+        clearTimeout(this.timer);
+        this.timer = false;
+    }
+
+    scrollBack(self) {
+        let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2) + self.itemHeight/2;
+        if (scrollTo <= self.itemHeight ) {
+            scrollTo += self.clonesHeight - self.itemHeight/2;
+        }
+        self.DOM.el.scrollTo({ top:scrollTo, behavior: "smooth" });
+    }
+
     updateActiveItem() {
-        let middleScroll = this.getScrollPos() + this.DOM.el.clientHeight / 2;
+        let middleScroll = this.getScrollPos() + this.DOM.el.clientHeight/2;
         this.activeItem = Math.floor(middleScroll / this.itemHeight) % this.DOM.menuItems.length + 1;
         // remove current item class
         this.DOM.el.querySelectorAll('.active-menu-item').forEach(item => item.classList.remove('active-menu-item'));

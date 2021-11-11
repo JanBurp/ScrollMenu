@@ -1,6 +1,11 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .jeg_mainmenu_wrap {
     position: relative;
     text-align: center;
+    scroll-behavior: smooth;
 }
 
 .jeg_mainmenu_wrap > div.top,
@@ -38,7 +43,7 @@ ul.jeg_main_menu {
 }
 
 .jeg_main_menu > li.menu-item {
-    padding: 0.15rem 0;
+    padding: 2px 0;
     list-style: none;
 }
 
@@ -48,10 +53,14 @@ ul.jeg_main_menu {
     position: relative;
     cursor: pointer;
     font-size: 1rem;
-    padding: 0.25rem 0.5rem;
+    padding: 5px 0.5rem;
     color: #FB1A3C;
     transition: transform 0.2s;
     text-decoration: none;
+}
+
+.jeg_main_menu > li.current-menu-item >a {
+    color: #000;
 }
 
 
