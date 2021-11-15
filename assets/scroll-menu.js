@@ -16,17 +16,21 @@ class ScrollMenu {
         this.DOM.currentItem = this.DOM.el.querySelector('.current-menu-item');
 
         this.prepareDOM();
-        this.cloneItems();
-        this.initScroll();
-        this.initEvents();
 
-        this.render();
+        let self = this;
+        window.addEventListener("load", function () {
+            self.cloneItems();
+            self.initScroll();
+            self.initEvents();
+            self.render();
+            self.scrollToActiveItem(self,false)
+        });
+
     }
 
     initEvents() {
         let self = this;
         this.timer = false;
-        window.addEventListener("load", () => self.scrollToActiveItem(self,false) );
         window.addEventListener('resize', () => this.resize());
     }
 
@@ -37,15 +41,27 @@ class ScrollMenu {
 
     prepareDOM() {
         // transparent blocks on top and bottom
-        var top = document.createElement("div");
+        let top = document.createElement("div");
         top.classList.add('top');
         this.DOM.wrapper.appendChild(top);
-        var bottom = document.createElement("div");
+        let bottom = document.createElement("div");
         bottom.classList.add('bottom');
         this.DOM.wrapper.appendChild(bottom);
 
         // items a unique class
         this.DOM.menuItems.forEach( (item, index) => item.classList.add('item-'+(index+1)) );
+
+        // scroll block on top, so scrolling is possible
+        let self = this;
+        this.DOM.scrollContainer = document.createElement("div");
+        this.DOM.scrollContainer.classList.add('_scrollcontainer');
+        this.DOM.scrollContainer.addEventListener('click', () => {
+            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
+            alert(url);
+        });
+        this.DOM.scroller = document.createElement("div");
+        this.DOM.scroller.classList.add('_scroller');
+        this.DOM.wrapper.appendChild(this.DOM.scrollContainer).appendChild(this.DOM.scroller);
     }
 
     cloneItems() {
@@ -66,7 +82,8 @@ class ScrollMenu {
         // All clones height
         this.clonesHeight = totalClones * this.itemHeight;
         // Scrollable area height
-        this.scrollHeight = this.DOM.el.scrollHeight;
+        this.scrollHeight = this.clonesHeight*2; //this.DOM.el.scrollHeight;
+        this.DOM.scroller.style.height = this.scrollHeight;
     }
 
     initScroll() {
@@ -79,11 +96,14 @@ class ScrollMenu {
     }
 
     getScrollPos() {
-        return (this.DOM.el.pageYOffset || this.DOM.el.scrollTop) - (this.DOM.el.clientTop || 0);
+        let scrollPos = (this.DOM.scrollContainer.pageYOffset || this.DOM.scrollContainer.scrollTop) - (this.DOM.scrollContainer.clientTop || 0);
+        this.DOM.el.scrollTo({ top:scrollPos, behavior: 'instant' });
+        return scrollPos;
     }
 
     setScrollPos(pos) {
         this.DOM.el.scrollTop = pos;
+        this.DOM.scrollContainer.scrollTop = pos;
     }
 
 
@@ -91,7 +111,7 @@ class ScrollMenu {
         this.scrollPos = this.getScrollPos();
 
         // Scroll to the top when you’ve reached the bottom
-        if ( this.clonesHeight + this.scrollPos >= this.scrollHeight ) {
+        if ( this.scrollPos + this.clonesHeight >= this.scrollHeight ) {
             this.setScrollPos(1); // Scroll down 1 pixel to allow upwards scrolling
         }
         // Scroll to the bottom when you reach the top
@@ -127,10 +147,11 @@ class ScrollMenu {
     scrollToActiveItem(self,smooth) {
         let behavior = (smooth!==false) ? 'smooth' : 'instant';
         let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
-        if (scrollTo <= self.itemHeight ) {
-            scrollTo += self.clonesHeight - self.itemHeight/2;
+        if (scrollTo <= 0) {
+            scrollTo += self.clonesHeight;
         }
         self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
+        self.DOM.scrollContainer.scrollTo({ top:scrollTo, behavior: behavior });
     }
 
     updateActiveItem() {
