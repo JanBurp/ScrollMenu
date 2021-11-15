@@ -26,15 +26,15 @@ html {
 }
 
 
-ul.jeg_main_menu {
+.jeg_main_menu {
     width: 300px;
     height: 200px;
     position: relative;
     margin: auto;
+    padding: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Hide scrollbar in FF */
-    text-align: center;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -42,12 +42,12 @@ ul.jeg_main_menu {
     user-select: none;
 }
 
-.jeg_main_menu > li.menu-item {
+.menu-item {
     padding: 2px 0;
     list-style: none;
 }
 
-.jeg_main_menu > li.menu-item>a {
+.menu-item>a {
     display: inline-block;
     white-space: nowrap;
     position: relative;
@@ -59,18 +59,24 @@ ul.jeg_main_menu {
     text-decoration: none;
 }
 
-.jeg_main_menu > li.current-menu-item >a {
+.current-menu-item >a {
     color: #000;
 }
 
 
-.jeg_main_menu > li.active-menu-item>a {
-    transform: scale(1.5);
+.active-menu-item {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    transform: translate(-50%,-50%) scale(1.5);
     box-shadow: 0px 0px 10px #DDD;
+    background-color: #FFF;
 }
 
 /* Pseudo-element for making sure that hover area is active */
-.jeg_main_menu > li.menu-item>a:hover::after {
+.menu-item>a:hover::after {
     content: '';
     position: absolute;
     top: 0;

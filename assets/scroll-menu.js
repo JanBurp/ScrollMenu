@@ -4,7 +4,7 @@ class ScrollMenu {
     itemHeight    = 0;
     scrollHeight  = 0;
     clonesHeight  = 0;
-    activeItem    = 0;
+    activeItem    = -1;
     scrollPos     = 0;
     prevScrollPos = 0;
     timer         = false;
@@ -54,7 +54,6 @@ class ScrollMenu {
 
         // Remove current clones
         this.DOM.el.querySelectorAll('._clone').forEach(clone => this.DOM.el.removeChild(clone));
-
         // Add new clones
         let totalClones = 0;
         this.DOM.menuItems.filter((_, index) => (index < fitIn)).map(target => {
@@ -110,8 +109,6 @@ class ScrollMenu {
             this.resetWaitTimer();
         }
         this.prevScrollPos = this.scrollPos;
-
-        // console.log(this.scrollPos);
         this.updateActiveItem();
     }
 
@@ -133,17 +130,24 @@ class ScrollMenu {
         if (scrollTo <= self.itemHeight ) {
             scrollTo += self.clonesHeight - self.itemHeight/2;
         }
-        // console.log('scrollToActiveItem', scrollTo, self.itemHeight, self.DOM.currentItem.offsetTop, self.DOM.el.clientHeight );
         self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
     }
 
     updateActiveItem() {
         let middleScroll = this.getScrollPos() + this.DOM.el.clientHeight/2;
-        this.activeItem = Math.floor(middleScroll / this.itemHeight) % this.DOM.menuItems.length + 1;
-        // remove current item class
-        this.DOM.el.querySelectorAll('.active-menu-item').forEach(item => item.classList.remove('active-menu-item'));
-        // set new current item class
-        this.DOM.el.querySelectorAll('li.item-'+this.activeItem).forEach( item => item.classList.add('active-menu-item'));
+        let newActiveItem = Math.floor(middleScroll / this.itemHeight) % this.DOM.menuItems.length;
+        if (newActiveItem != this.activeItem) {
+            this.activeItem = newActiveItem;
+            // remove current active item
+            let current = this.DOM.wrapper.querySelector('.active-menu-item');
+            if (current) {
+                this.DOM.wrapper.removeChild(current);
+            }
+            // clone active item
+            const clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
+            clone.classList.add('active-menu-item');
+            this.DOM.wrapper.appendChild(clone);
+        }
     }
 
     render() {
