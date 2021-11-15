@@ -1,5 +1,14 @@
 class ScrollMenu {
 
+    DOM           = {};
+    itemHeight    = 0;
+    scrollHeight  = 0;
+    clonesHeight  = 0;
+    activeItem    = 0;
+    scrollPos     = 0;
+    prevScrollPos = 0;
+    timer         = false;
+
     constructor(el) {
         this.DOM = {wrapper: el};
         this.DOM.el = this.DOM.wrapper.querySelector('ul');
@@ -15,7 +24,9 @@ class ScrollMenu {
     }
 
     initEvents() {
+        let self = this;
         this.timer = false;
+        window.addEventListener("load", () => self.scrollToActiveItem(self,false) );
         window.addEventListener('resize', () => this.resize());
     }
 
@@ -100,13 +111,14 @@ class ScrollMenu {
         }
         this.prevScrollPos = this.scrollPos;
 
+        // console.log(this.scrollPos);
         this.updateActiveItem();
     }
 
     startWaitTimer() {
         let self = this;
         this.timer = setTimeout(function(){
-            self.scrollBack(self);
+            self.scrollToActiveItem(self);
         }, 3000);
     }
 
@@ -115,12 +127,14 @@ class ScrollMenu {
         this.timer = false;
     }
 
-    scrollBack(self) {
-        let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2) + self.itemHeight/2;
+    scrollToActiveItem(self,smooth) {
+        let behavior = (smooth!==false) ? 'smooth' : 'instant';
+        let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
         if (scrollTo <= self.itemHeight ) {
             scrollTo += self.clonesHeight - self.itemHeight/2;
         }
-        self.DOM.el.scrollTo({ top:scrollTo, behavior: "smooth" });
+        // console.log('scrollToActiveItem', scrollTo, self.itemHeight, self.DOM.currentItem.offsetTop, self.DOM.el.clientHeight );
+        self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
     }
 
     updateActiveItem() {
