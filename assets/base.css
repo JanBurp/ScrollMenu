@@ -1,12 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap&subset=latin-ext");
 
 body {
-    --color-text: #111;
-    --color-bg: #fff;
-    --color-link: #FF364C;
-    --color-link-hover: #000;
-    --color-menu: #000;
-    --color-menu-hover: #c0092b;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: "Bree Serif", serif;
