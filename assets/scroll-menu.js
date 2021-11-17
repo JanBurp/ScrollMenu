@@ -8,6 +8,8 @@ class ScrollMenu {
     scrollPos     = 0;
     prevScrollPos = 0;
     timer         = false;
+    autoScroll    = false;
+    scrollSpeed   = 0;
 
     constructor(el) {
         this.DOM = {wrapper: el};
@@ -31,13 +33,17 @@ class ScrollMenu {
     initEvents() {
         let self = this;
         this.timer = false;
-        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('resize', () => self.resize());
+        this.DOM.scrollContainer.addEventListener('mousemove', () => self.setAutoScrollSpeed(event));
+        this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
+        this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
     }
 
     resize() {
         this.cloneItems();
         this.initScroll();
     }
+
 
     prepareDOM() {
         // transparent blocks on top and bottom
@@ -59,6 +65,7 @@ class ScrollMenu {
             let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
             alert(url);
         });
+
         this.DOM.scroller = document.createElement("div");
         this.DOM.scroller.classList.add('_scroller');
         this.DOM.wrapper.appendChild(this.DOM.scrollContainer).appendChild(this.DOM.scroller);
@@ -106,8 +113,28 @@ class ScrollMenu {
         this.DOM.scrollContainer.scrollTop = pos;
     }
 
+    setAutoScrollSpeed(event) {
+        if (this.autoScroll) {
+            let relativePos = event.clientY - this.DOM.el.clientHeight/2;
+            this.scrollSpeed = relativePos / (this.DOM.el.clientHeight/2)
+        }
+    }
+
+    startAutoScroll() {
+        this.autoScroll = true;
+    }
+
+    stopAutoScroll() {
+        this.autoScroll = false;
+    }
 
     scrollUpdate() {
+        if (this.autoScroll) {
+            let pos = this.getScrollPos();
+            pos += (this.scrollSpeed*this.scrollSpeed*this.scrollSpeed) * 20;  // scroll speed factor
+            this.setScrollPos(pos);
+        }
+
         this.scrollPos = this.getScrollPos();
 
         // Scroll to the top when you’ve reached the bottom
