@@ -37,6 +37,14 @@ class ScrollMenu {
         this.DOM.scrollContainer.addEventListener('mousemove', () => self.setAutoScrollSpeed(event));
         this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
         this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
+        this.DOM.scrollContainer.addEventListener('click', (event) => {
+            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
+            // let pos = event.clientY - this.DOM.el.clientHeight/2;
+            // let clickedItem = Math.floor(pos / this.itemHeight) % this.DOM.menuItems.length + 1;
+            // let clickedUrl = this.DOM.menuItems[clickedItem].getAttribute('href');
+            console.log(url);
+            alert(url);
+        });
     }
 
     resize() {
@@ -61,11 +69,6 @@ class ScrollMenu {
         let self = this;
         this.DOM.scrollContainer = document.createElement("div");
         this.DOM.scrollContainer.classList.add('_scrollcontainer');
-        this.DOM.scrollContainer.addEventListener('click', () => {
-            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
-            alert(url);
-        });
-
         this.DOM.scroller = document.createElement("div");
         this.DOM.scroller.classList.add('_scroller');
         this.DOM.wrapper.appendChild(this.DOM.scrollContainer).appendChild(this.DOM.scroller);
