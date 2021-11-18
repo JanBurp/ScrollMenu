@@ -26,7 +26,7 @@ class ScrollMenu {
             self.initEvents();
             self.render();
             self.scrollToActiveItem(self,false)
-            // console.log(self);
+            console.log('scrollmenu',self);
         });
 
     }
@@ -74,7 +74,7 @@ class ScrollMenu {
         this.clonesHeight = totalClones * this.itemHeight;
         // Scrollable area height
         this.scrollHeight = this.clonesHeight*2; //this.DOM.el.scrollHeight;
-        this.DOM.scroller.style.height = this.scrollHeight;
+        this.DOM.scroller.style.height = this.scrollHeight+"px";
     }
 
     initEvents() {
@@ -113,6 +113,7 @@ class ScrollMenu {
     }
 
     setScrollPos(pos) {
+        // console.log('setScrollPos',pos);
         this.DOM.el.scrollTop = pos;
         this.DOM.scrollContainer.scrollTop = pos;
     }
@@ -121,19 +122,23 @@ class ScrollMenu {
         if (this.autoScroll) {
             let relativePos = event.clientY - this.DOM.el.clientHeight/2;
             this.scrollSpeed = relativePos / (this.DOM.el.clientHeight/2)
+            // console.log('setAutoScrollSpeed',this.scrollSpeed);
         }
     }
 
     startAutoScroll() {
+        // console.log('startAutoScroll');
         this.autoScroll = true;
     }
 
     stopAutoScroll() {
+        // console.log('stopAutoScroll');
         this.autoScroll = false;
     }
 
     scrollUpdate() {
         if (this.autoScroll) {
+            // console.log('scrollUpdate',this.autoScroll);
             let pos = this.getScrollPos();
             pos += (this.scrollSpeed*this.scrollSpeed*this.scrollSpeed) * 20;  // scroll speed factor
             this.setScrollPos(pos);
@@ -146,7 +151,7 @@ class ScrollMenu {
             this.setScrollPos(1);
         }
         // Scroll to the bottom when you reach the top
-        else if ( this.scrollPos <= 0 ) {
+        else if ( this.scrollPos < 0 ) {
             this.setScrollPos(this.scrollHeight - this.clonesHeight);
         }
 
