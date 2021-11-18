@@ -85,11 +85,9 @@ class ScrollMenu {
         this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
         this.DOM.scrollContainer.addEventListener('click', (event) => {
             let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
-            // let pos = event.clientY - this.DOM.el.clientHeight/2;
-            // let clickedItem = Math.floor(pos / this.itemHeight) % this.DOM.menuItems.length + 1;
-            // let clickedUrl = this.DOM.menuItems[clickedItem].getAttribute('href');
-            console.log(url);
-            alert(url);
+            location.href = url;
+            // console.log(url);
+            // alert(url);
         });
     }
 
