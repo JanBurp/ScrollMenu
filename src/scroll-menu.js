@@ -26,7 +26,7 @@ class ScrollMenu {
             self.initEvents();
             self.render();
             self.scrollToActiveItem(self,false)
-            console.log('scrollmenu',self);
+            // console.log('scrollmenu',self);
         });
 
     }
