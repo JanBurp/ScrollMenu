@@ -202,7 +202,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       this.scrollPos = this.getScrollPos(); // Scroll to the top when you’ve reached the bottom
 
       if (this.scrollPos + this.clonesHeight >= this.scrollHeight) {
-        this.setScrollPos(0);
+        this.setScrollPos(1);
       } // Scroll to the bottom when you reach the top
       else if (this.scrollPos <= 0) {
         this.setScrollPos(this.scrollHeight - this.clonesHeight);
@@ -239,10 +239,9 @@ var ScrollMenu = /*#__PURE__*/function () {
     value: function scrollToActiveItem(self, smooth) {
       var behavior = smooth !== false ? 'smooth' : 'instant';
       var scrollTo = self.DOM.currentItem.offsetTop - self.DOM.el.clientHeight / 2;
-      var currentScroll = self.getScrollPos();
+      var currentScroll = self.getScrollPos(); // console.log('scrollToActiveItem',currentScroll,scrollTo);
 
-      if (scrollTo !== currentScroll) {
-        // console.log('scrollToActiveItem',currentScroll,scrollTo);
+      if (Math.abs(scrollTo - currentScroll) > 1) {
         if (scrollTo <= 0) {
           scrollTo += self.clonesHeight;
         }

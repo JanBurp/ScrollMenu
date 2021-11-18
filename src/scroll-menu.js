@@ -143,7 +143,7 @@ class ScrollMenu {
 
         // Scroll to the top when you’ve reached the bottom
         if ( this.scrollPos + this.clonesHeight >= this.scrollHeight ) {
-            this.setScrollPos(0);
+            this.setScrollPos(1);
         }
         // Scroll to the bottom when you reach the top
         else if ( this.scrollPos <= 0 ) {
@@ -179,8 +179,8 @@ class ScrollMenu {
         let behavior = (smooth!==false) ? 'smooth' : 'instant';
         let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
         let currentScroll = self.getScrollPos();
-        if ( scrollTo !== currentScroll ) {
-            // console.log('scrollToActiveItem',currentScroll,scrollTo);
+        // console.log('scrollToActiveItem',currentScroll,scrollTo);
+        if ( Math.abs(scrollTo - currentScroll) > 1 ) {
             if (scrollTo <= 0) {
                 scrollTo += self.clonesHeight;
             }
