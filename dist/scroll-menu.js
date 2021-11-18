@@ -57,7 +57,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       self.initScroll();
       self.initEvents();
       self.render();
-      self.scrollToActiveItem(self, false); // console.log(self);
+      self.scrollToActiveItem(self, false); // console.log('scrollmenu',self);
     });
   }
 
@@ -113,7 +113,7 @@ var ScrollMenu = /*#__PURE__*/function () {
 
       this.scrollHeight = this.clonesHeight * 2; //this.DOM.el.scrollHeight;
 
-      this.DOM.scroller.style.height = this.scrollHeight;
+      this.DOM.scroller.style.height = this.scrollHeight + "px";
     }
   }, {
     key: "initEvents",
@@ -168,6 +168,7 @@ var ScrollMenu = /*#__PURE__*/function () {
   }, {
     key: "setScrollPos",
     value: function setScrollPos(pos) {
+      // console.log('setScrollPos',pos);
       this.DOM.el.scrollTop = pos;
       this.DOM.scrollContainer.scrollTop = pos;
     }
@@ -176,23 +177,26 @@ var ScrollMenu = /*#__PURE__*/function () {
     value: function setAutoScrollSpeed(event) {
       if (this.autoScroll) {
         var relativePos = event.clientY - this.DOM.el.clientHeight / 2;
-        this.scrollSpeed = relativePos / (this.DOM.el.clientHeight / 2);
+        this.scrollSpeed = relativePos / (this.DOM.el.clientHeight / 2); // console.log('setAutoScrollSpeed',this.scrollSpeed);
       }
     }
   }, {
     key: "startAutoScroll",
     value: function startAutoScroll() {
+      // console.log('startAutoScroll');
       this.autoScroll = true;
     }
   }, {
     key: "stopAutoScroll",
     value: function stopAutoScroll() {
+      // console.log('stopAutoScroll');
       this.autoScroll = false;
     }
   }, {
     key: "scrollUpdate",
     value: function scrollUpdate() {
       if (this.autoScroll) {
+        // console.log('scrollUpdate',this.autoScroll);
         var pos = this.getScrollPos();
         pos += this.scrollSpeed * this.scrollSpeed * this.scrollSpeed * 20; // scroll speed factor
 
@@ -204,7 +208,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       if (this.scrollPos + this.clonesHeight >= this.scrollHeight) {
         this.setScrollPos(1);
       } // Scroll to the bottom when you reach the top
-      else if (this.scrollPos <= 0) {
+      else if (this.scrollPos < 0) {
         this.setScrollPos(this.scrollHeight - this.clonesHeight);
       } // Scroll back to current item when scrolling stoppped
 

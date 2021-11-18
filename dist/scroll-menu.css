@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap&subset=latin-ext");
+
 html {
     scroll-behavior: smooth;
 }
@@ -14,6 +16,7 @@ html {
     margin: auto;
     text-align: center;
     scroll-behavior: smooth;
+    font-family: "Bree Serif", serif;
 }
 
 #scroll-menu-wrapper > div.top,
@@ -52,6 +55,7 @@ html {
 #scroll-menu-wrapper > ul > li {
     padding:0;
     margin: 0;
+    line-height:1.5rem;
     list-style: none;
     float: none;
     text-align: center;
@@ -64,10 +68,13 @@ html {
     position: relative;
     cursor: pointer;
     font-size: 1rem;
+    line-height:1rem;
     padding: 0px 0.5rem;
     color: #FB1A3C;
     transition: transform 0.2s;
     text-decoration: none;
+    text-transform: none;
+
 }
 
 #scroll-menu-wrapper > ul > .current-menu-item > a,
@@ -78,7 +85,6 @@ html {
 #scroll-menu-wrapper > .active-menu-item {
     position: absolute;
     display: block;
-    margin-top: 1.5rem;
     top: 50%;
     left: 50%;
     width: 150px;                                                       /* Width of active item */
