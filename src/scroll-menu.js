@@ -120,9 +120,8 @@ class ScrollMenu {
 
     setAutoScrollSpeed(event) {
         if (this.autoScroll) {
-            let relativePos = event.clientY - this.DOM.el.clientHeight/2;
+            let relativePos = (event.clientY - this.DOM.el.getBoundingClientRect().top) - this.DOM.el.clientHeight/2;
             this.scrollSpeed = relativePos / (this.DOM.el.clientHeight/2)
-            // console.log('setAutoScrollSpeed',this.scrollSpeed);
         }
     }
 
@@ -151,7 +150,7 @@ class ScrollMenu {
             this.setScrollPos(1);
         }
         // Scroll to the bottom when you reach the top
-        else if ( this.scrollPos < 0 ) {
+        else if ( this.scrollPos <= 0 ) {
             this.setScrollPos(this.scrollHeight - this.clonesHeight);
         }
 
