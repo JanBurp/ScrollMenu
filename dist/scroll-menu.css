@@ -50,8 +50,11 @@ html {
 }
 
 #scroll-menu-wrapper > ul > li {
-    padding: ;
+    padding:0;
+    margin: 0;
     list-style: none;
+    float: none;
+    text-align: center;
 }
 
 #scroll-menu-wrapper > ul > li > a,
@@ -75,6 +78,7 @@ html {
 #scroll-menu-wrapper > .active-menu-item {
     position: absolute;
     display: block;
+    margin-top: 1.5rem;
     top: 50%;
     left: 50%;
     width: 150px;                                                       /* Width of active item */

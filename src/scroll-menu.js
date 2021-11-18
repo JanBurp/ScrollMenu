@@ -26,6 +26,7 @@ class ScrollMenu {
             self.initEvents();
             self.render();
             self.scrollToActiveItem(self,false)
+            // console.log(self);
         });
 
     }
@@ -142,7 +143,7 @@ class ScrollMenu {
 
         // Scroll to the top when you’ve reached the bottom
         if ( this.scrollPos + this.clonesHeight >= this.scrollHeight ) {
-            this.setScrollPos(1); // Scroll down 1 pixel to allow upwards scrolling
+            this.setScrollPos(0);
         }
         // Scroll to the bottom when you reach the top
         else if ( this.scrollPos <= 0 ) {
@@ -177,11 +178,15 @@ class ScrollMenu {
     scrollToActiveItem(self,smooth) {
         let behavior = (smooth!==false) ? 'smooth' : 'instant';
         let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
-        if (scrollTo <= 0) {
-            scrollTo += self.clonesHeight;
+        let currentScroll = self.getScrollPos();
+        if ( scrollTo !== currentScroll ) {
+            // console.log('scrollToActiveItem',currentScroll,scrollTo);
+            if (scrollTo <= 0) {
+                scrollTo += self.clonesHeight;
+            }
+            self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
+            self.DOM.scrollContainer.scrollTo({ top:scrollTo, behavior: behavior });
         }
-        self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
-        self.DOM.scrollContainer.scrollTo({ top:scrollTo, behavior: behavior });
     }
 
     updateActiveItem() {
