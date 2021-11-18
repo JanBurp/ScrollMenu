@@ -2,41 +2,46 @@ html {
     scroll-behavior: smooth;
 }
 
-.jeg_mainmenu_wrap {
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+#scroll-menu-wrapper {
     position: relative;
-    width: 300px; /* Breedte van menu */
+    width: 300px;                                                   /* Width of menu */
+    height: 200px;                                                  /* Height of menu */
     margin: auto;
     text-align: center;
     scroll-behavior: smooth;
 }
 
-.jeg_mainmenu_wrap > div.top,
-.jeg_mainmenu_wrap > div.bottom {
+#scroll-menu-wrapper > div.top,
+#scroll-menu-wrapper > div.bottom {
     display: block;
     position: absolute;
     width: 100%;
-    height: 70px; /* Hoogte van transparante gradients aan boven en onderkant */
+    height: 70px;                                                   /* Height of transparant gradients op top and bottom */
     background-color: transparent;
 }
-.jeg_mainmenu_wrap > div.top {
+#scroll-menu-wrapper > div.top {
     top: 0;
     background-image: linear-gradient(rgb(255,255,255),rgba(255,255,255,0));
 }
-.jeg_mainmenu_wrap > div.bottom {
+#scroll-menu-wrapper > div.bottom {
     bottom: 0;
     background-image: linear-gradient(rgba(255,255,255,0),rgb(255,255,255));
 }
 
-
-.jeg_main_menu {
-    width: 300px;
-    height: 200px;  /* Hoogte van menu */
+#scroll-menu-wrapper > ul {
+    width: 100%;
+    height: 100%;
     position: relative;
     margin: auto;
     padding: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Hide scrollbar in FF */
+    scrollbar-width: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -44,12 +49,13 @@ html {
     user-select: none;
 }
 
-.menu-item {
+#scroll-menu-wrapper > ul > li {
     padding: ;
     list-style: none;
 }
 
-.menu-item>a {
+#scroll-menu-wrapper > ul > li > a,
+#scroll-menu-wrapper > .active-menu-item > a {
     display: inline-block;
     white-space: nowrap;
     position: relative;
@@ -61,51 +67,37 @@ html {
     text-decoration: none;
 }
 
-.current-menu-item >a {
-    color: #000;
+#scroll-menu-wrapper > ul > .current-menu-item > a,
+#scroll-menu-wrapper > .active-menu-item.current-menu-item > a {
+    color: #000;                                                        /* Color of active item */
 }
 
-
-.active-menu-item {
+#scroll-menu-wrapper > .active-menu-item {
     position: absolute;
     display: block;
     top: 50%;
     left: 50%;
-    width: 150px;
+    width: 150px;                                                       /* Width of active item */
     transform: translate(-50%,-50%) scale(1.5);
     box-shadow: 3px 3px 8px #8BA3B7;
     background-color: #FFF;
 }
-.active-menu-item >a {
+#scroll-menu-wrapper > .active-menu-item >a {
     padding: .25rem 1rem;
 }
 
-/* Pseudo-element for making sure that hover area is active */
-.menu-item>a:hover::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -5.5rem;
-    right: 0;
-    height: 100%;
-}
-
-._scrollcontainer {
+#scroll-menu-wrapper > .scrollcontainer {
     position: absolute;
     top: 0px;
     width: 100%;
     height: 100%;
     overflow: auto;
     cursor: pointer;
-    scrollbar-width: none; /* Hide scrollbar in FF */
-    z-index: 99999; /* must be on top */
+    scrollbar-width: none;
+    z-index: 999999;                                                     /* Must be on top */
 }
-._scroller {
+#scroll-menu-wrapper > .scrollcontainer .scroller {
     width: 100%;
     height: 100%;
-}
-
-::-webkit-scrollbar {
-    display: none;
 }
 

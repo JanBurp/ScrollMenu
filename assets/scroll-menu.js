@@ -14,7 +14,7 @@ class ScrollMenu {
     constructor(el) {
         this.DOM = {wrapper: el};
         this.DOM.el = this.DOM.wrapper.querySelector('ul');
-        this.DOM.menuItems = [...this.DOM.el.querySelectorAll('.menu-item')];
+        this.DOM.menuItems = [...this.DOM.el.querySelectorAll('li')];
         this.DOM.currentItem = this.DOM.el.querySelector('.current-menu-item');
 
         this.prepareDOM();
@@ -30,30 +30,10 @@ class ScrollMenu {
 
     }
 
-    initEvents() {
-        let self = this;
-        this.timer = false;
-        window.addEventListener('resize', () => self.resize());
-        this.DOM.scrollContainer.addEventListener('mousemove', () => self.setAutoScrollSpeed(event));
-        this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
-        this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
-        this.DOM.scrollContainer.addEventListener('click', (event) => {
-            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
-            // let pos = event.clientY - this.DOM.el.clientHeight/2;
-            // let clickedItem = Math.floor(pos / this.itemHeight) % this.DOM.menuItems.length + 1;
-            // let clickedUrl = this.DOM.menuItems[clickedItem].getAttribute('href');
-            console.log(url);
-            alert(url);
-        });
-    }
-
-    resize() {
-        this.cloneItems();
-        this.initScroll();
-    }
-
-
     prepareDOM() {
+        // Unique ID as wrapper
+        this.DOM.wrapper.id = 'scroll-menu-wrapper';
+
         // transparent blocks on top and bottom
         let top = document.createElement("div");
         top.classList.add('top');
@@ -68,9 +48,9 @@ class ScrollMenu {
         // scroll block on top, so scrolling is possible
         let self = this;
         this.DOM.scrollContainer = document.createElement("div");
-        this.DOM.scrollContainer.classList.add('_scrollcontainer');
+        this.DOM.scrollContainer.classList.add('scrollcontainer');
         this.DOM.scroller = document.createElement("div");
-        this.DOM.scroller.classList.add('_scroller');
+        this.DOM.scroller.classList.add('scroller');
         this.DOM.wrapper.appendChild(this.DOM.scrollContainer).appendChild(this.DOM.scroller);
     }
 
@@ -94,6 +74,28 @@ class ScrollMenu {
         // Scrollable area height
         this.scrollHeight = this.clonesHeight*2; //this.DOM.el.scrollHeight;
         this.DOM.scroller.style.height = this.scrollHeight;
+    }
+
+    initEvents() {
+        let self = this;
+        this.timer = false;
+        window.addEventListener('resize', () => self.resize());
+        this.DOM.scrollContainer.addEventListener('mousemove', () => self.setAutoScrollSpeed(event));
+        this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
+        this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
+        this.DOM.scrollContainer.addEventListener('click', (event) => {
+            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
+            // let pos = event.clientY - this.DOM.el.clientHeight/2;
+            // let clickedItem = Math.floor(pos / this.itemHeight) % this.DOM.menuItems.length + 1;
+            // let clickedUrl = this.DOM.menuItems[clickedItem].getAttribute('href');
+            console.log(url);
+            alert(url);
+        });
+    }
+
+    resize() {
+        this.cloneItems();
+        this.initScroll();
     }
 
     initScroll() {
