@@ -124,7 +124,7 @@ var ScrollMenu = /*#__PURE__*/function () {
         return self.resize();
       });
       this.DOM.scrollContainer.addEventListener('mousemove', function () {
-        return self.setAutoScrollSpeed(event);
+        return self.mouseMoved(event);
       });
       this.DOM.scrollContainer.addEventListener('mouseenter', function () {
         return self.startAutoScroll();
@@ -134,8 +134,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       });
       this.DOM.scrollContainer.addEventListener('click', function (event) {
         var url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
-        location.href = url; // console.log(url);
-        // alert(url);
+        location.href = url;
       });
     }
   }, {
@@ -173,11 +172,18 @@ var ScrollMenu = /*#__PURE__*/function () {
       this.DOM.scrollContainer.scrollTop = pos;
     }
   }, {
-    key: "setAutoScrollSpeed",
-    value: function setAutoScrollSpeed(event) {
+    key: "mouseMoved",
+    value: function mouseMoved(event) {
+      var relativePosY = event.clientY - this.DOM.el.getBoundingClientRect().top - this.DOM.el.clientHeight / 2;
+
       if (this.autoScroll) {
-        var relativePos = event.clientY - this.DOM.el.getBoundingClientRect().top - this.DOM.el.clientHeight / 2;
-        this.scrollSpeed = relativePos / (this.DOM.el.clientHeight / 2);
+        this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight / 2);
+      }
+
+      if (relativePosY > -this.itemHeight && relativePosY < this.itemHeight) {
+        this.DOM.wrapper.querySelector('.active-menu-item').classList.add('hover');
+      } else {
+        this.DOM.wrapper.querySelector('.active-menu-item').classList.remove('hover');
       }
     }
   }, {
@@ -198,7 +204,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       if (this.autoScroll) {
         // console.log('scrollUpdate',this.autoScroll);
         var pos = this.getScrollPos();
-        pos += this.scrollSpeed * this.scrollSpeed * this.scrollSpeed * 20; // scroll speed factor
+        pos += this.scrollSpeed * this.scrollSpeed * this.scrollSpeed * 4; // scroll speed factor
 
         this.setScrollPos(pos);
       }
