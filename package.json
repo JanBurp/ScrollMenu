@@ -1,6 +1,6 @@
 {
   "name": "scrollmenu",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Scrollable menu in plain JavaScript",
   "author": "Jan den Besten",
   "scripts": {
