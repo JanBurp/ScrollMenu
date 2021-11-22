@@ -139,7 +139,7 @@ class ScrollMenu {
         if (this.autoScroll) {
             // console.log('scrollUpdate',this.autoScroll);
             let pos = this.getScrollPos();
-            pos += (this.scrollSpeed*this.scrollSpeed*this.scrollSpeed) * 20;  // scroll speed factor
+            pos += (this.scrollSpeed*this.scrollSpeed*this.scrollSpeed) * 4;  // scroll speed factor
             this.setScrollPos(pos);
         }
 
