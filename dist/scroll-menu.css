@@ -95,6 +95,10 @@ html {
 #scroll-menu-wrapper > .active-menu-item >a {
     padding: .25rem 1rem;
 }
+#scroll-menu-wrapper > .active-menu-item.hover >a {
+    color: #000;
+}
+
 
 #scroll-menu-wrapper > .scrollcontainer {
     position: absolute;

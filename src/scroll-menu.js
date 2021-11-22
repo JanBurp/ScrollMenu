@@ -81,14 +81,12 @@ class ScrollMenu {
         let self = this;
         this.timer = false;
         window.addEventListener('resize', () => self.resize());
-        this.DOM.scrollContainer.addEventListener('mousemove', () => self.setAutoScrollSpeed(event));
+        this.DOM.scrollContainer.addEventListener('mousemove', () => self.mouseMoved(event));
         this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
         this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
         this.DOM.scrollContainer.addEventListener('click', (event) => {
             let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
             location.href = url;
-            // console.log(url);
-            // alert(url);
         });
     }
 
@@ -118,10 +116,17 @@ class ScrollMenu {
         this.DOM.scrollContainer.scrollTop = pos;
     }
 
-    setAutoScrollSpeed(event) {
+    mouseMoved(event) {
+        let relativePosY = (event.clientY - this.DOM.el.getBoundingClientRect().top) - this.DOM.el.clientHeight/2;
         if (this.autoScroll) {
-            let relativePos = (event.clientY - this.DOM.el.getBoundingClientRect().top) - this.DOM.el.clientHeight/2;
-            this.scrollSpeed = relativePos / (this.DOM.el.clientHeight/2)
+            this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight/2)
+        }
+
+        if ( (relativePosY > -this.itemHeight ) && (relativePosY < this.itemHeight ) ) {
+            this.DOM.wrapper.querySelector('.active-menu-item').classList.add('hover');
+        }
+        else {
+            this.DOM.wrapper.querySelector('.active-menu-item').classList.remove('hover');
         }
     }
 
