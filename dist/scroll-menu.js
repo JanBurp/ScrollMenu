@@ -177,7 +177,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       var relativePosY = event.clientY - this.DOM.el.getBoundingClientRect().top - this.DOM.el.clientHeight / 2;
 
       if (this.autoScroll) {
-        this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight / 2);
+        this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight / 2); // console.log(relativePosY,this.scrollSpeed);
       }
 
       if (relativePosY > -this.itemHeight && relativePosY < this.itemHeight) {
@@ -202,9 +202,10 @@ var ScrollMenu = /*#__PURE__*/function () {
     key: "scrollUpdate",
     value: function scrollUpdate() {
       if (this.autoScroll) {
-        // console.log('scrollUpdate',this.autoScroll);
         var pos = this.getScrollPos();
-        pos += this.scrollSpeed * this.scrollSpeed * this.scrollSpeed * 4; // scroll speed factor
+        var diff = this.scrollSpeed * 4; // scroll speed factor
+
+        pos = (pos * 100 + diff * 100) / 100; // console.log('scrollUpdate',this.scrollSpeed,diff,pos);
 
         this.setScrollPos(pos);
       }
