@@ -120,7 +120,12 @@ class ScrollMenu {
         let relativePosY = (event.clientY - this.DOM.el.getBoundingClientRect().top) - this.DOM.el.clientHeight/2;
 
         if (this.autoScroll) {
-            this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight/2)
+            if ( Math.abs(relativePosY)<26 ) {
+                this.scrollSpeed = 0;
+            }
+            else {
+                this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight/2)
+            }
             // console.log(relativePosY,this.scrollSpeed);
         }
 
