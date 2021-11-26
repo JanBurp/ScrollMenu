@@ -1,1 +1,2 @@
-const menu = new ScrollMenu(document.querySelector('.jeg_mainmenu_wrap'));
+// Create a scroll menu from normal menu
+new ScrollMenu(document.querySelector('.nav'));

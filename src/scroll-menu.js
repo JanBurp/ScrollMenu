@@ -26,7 +26,6 @@ class ScrollMenu {
             self.initEvents();
             self.render();
             self.scrollToActiveItem(self,false)
-            // console.log('scrollmenu',self);
         });
 
     }
@@ -111,7 +110,6 @@ class ScrollMenu {
     }
 
     setScrollPos(pos) {
-        // console.log('setScrollPos',pos);
         this.DOM.el.scrollTop = pos;
         this.DOM.scrollContainer.scrollTop = pos;
     }
@@ -126,7 +124,6 @@ class ScrollMenu {
             else {
                 this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight/2)
             }
-            // console.log(relativePosY,this.scrollSpeed);
         }
 
         if ( (relativePosY > -this.itemHeight ) && (relativePosY < this.itemHeight ) ) {
@@ -138,21 +135,18 @@ class ScrollMenu {
     }
 
     startAutoScroll() {
-        // console.log('startAutoScroll');
         this.autoScroll = true;
     }
 
     stopAutoScroll() {
-        // console.log('stopAutoScroll');
         this.autoScroll = false;
     }
 
     scrollUpdate() {
         if (this.autoScroll) {
             let pos = this.getScrollPos();
-            let diff = this.scrollSpeed * 4;  // scroll speed factor
-            pos = (pos*100 + diff*100) / 100;
-            // console.log('scrollUpdate',this.scrollSpeed,diff,pos);
+            let diff = this.scrollSpeed * 10;      // scroll speed factor
+            pos = (pos*100 + diff*100) / 100;     // prevent JS Maths rounding errors
             this.setScrollPos(pos);
         }
 
@@ -196,7 +190,6 @@ class ScrollMenu {
         let behavior = (smooth!==false) ? 'smooth' : 'instant';
         let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
         let currentScroll = self.getScrollPos();
-        // console.log('scrollToActiveItem',currentScroll,scrollTo);
         if ( Math.abs(scrollTo - currentScroll) > 1 ) {
             if (scrollTo <= 0) {
                 scrollTo += self.clonesHeight;
