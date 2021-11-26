@@ -7,6 +7,10 @@ See `index.html` for minimal markup.
 See `assets/site.js` for activating.
 See `dist/scroll-menu.css` for styling, and in comments some options.
 
+# Demo
+
+https://janburp.github.io/ScrollMenu/
+
 # Changelog
 
 v1.2.0 - first commit for github
