@@ -187,15 +187,17 @@ class ScrollMenu {
     }
 
     scrollToActiveItem(self,smooth) {
-        let behavior = (smooth!==false) ? 'smooth' : 'instant';
-        let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
-        let currentScroll = self.getScrollPos();
-        if ( Math.abs(scrollTo - currentScroll) > 1 ) {
-            if (scrollTo <= 0) {
-                scrollTo += self.clonesHeight;
+        if (self.DOM.currentItem) {
+            let behavior = (smooth!==false) ? 'smooth' : 'instant';
+            let scrollTo = self.DOM.currentItem.offsetTop - (self.DOM.el.clientHeight / 2);
+            let currentScroll = self.getScrollPos();
+            if ( Math.abs(scrollTo - currentScroll) > 1 ) {
+                if (scrollTo <= 0) {
+                    scrollTo += self.clonesHeight;
+                }
+                self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
+                self.DOM.scrollContainer.scrollTo({ top:scrollTo, behavior: behavior });
             }
-            self.DOM.el.scrollTo({ top:scrollTo, behavior: behavior });
-            self.DOM.scrollContainer.scrollTo({ top:scrollTo, behavior: behavior });
         }
     }
 
