@@ -57,7 +57,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       self.initScroll();
       self.initEvents();
       self.render();
-      self.scrollToActiveItem(self, false); // console.log('scrollmenu',self);
+      self.scrollToActiveItem(self, false);
     });
   }
 
@@ -167,7 +167,6 @@ var ScrollMenu = /*#__PURE__*/function () {
   }, {
     key: "setScrollPos",
     value: function setScrollPos(pos) {
-      // console.log('setScrollPos',pos);
       this.DOM.el.scrollTop = pos;
       this.DOM.scrollContainer.scrollTop = pos;
     }
@@ -181,8 +180,7 @@ var ScrollMenu = /*#__PURE__*/function () {
           this.scrollSpeed = 0;
         } else {
           this.scrollSpeed = relativePosY / (this.DOM.el.clientHeight / 2);
-        } // console.log(relativePosY,this.scrollSpeed);
-
+        }
       }
 
       if (relativePosY > -this.itemHeight && relativePosY < this.itemHeight) {
@@ -194,13 +192,11 @@ var ScrollMenu = /*#__PURE__*/function () {
   }, {
     key: "startAutoScroll",
     value: function startAutoScroll() {
-      // console.log('startAutoScroll');
       this.autoScroll = true;
     }
   }, {
     key: "stopAutoScroll",
     value: function stopAutoScroll() {
-      // console.log('stopAutoScroll');
       this.autoScroll = false;
     }
   }, {
@@ -208,9 +204,9 @@ var ScrollMenu = /*#__PURE__*/function () {
     value: function scrollUpdate() {
       if (this.autoScroll) {
         var pos = this.getScrollPos();
-        var diff = this.scrollSpeed * 4; // scroll speed factor
+        var diff = this.scrollSpeed * 10; // scroll speed factor
 
-        pos = (pos * 100 + diff * 100) / 100; // console.log('scrollUpdate',this.scrollSpeed,diff,pos);
+        pos = (pos * 100 + diff * 100) / 100; // prevent JS Maths rounding errors
 
         this.setScrollPos(pos);
       }
@@ -253,23 +249,25 @@ var ScrollMenu = /*#__PURE__*/function () {
   }, {
     key: "scrollToActiveItem",
     value: function scrollToActiveItem(self, smooth) {
-      var behavior = smooth !== false ? 'smooth' : 'instant';
-      var scrollTo = self.DOM.currentItem.offsetTop - self.DOM.el.clientHeight / 2;
-      var currentScroll = self.getScrollPos(); // console.log('scrollToActiveItem',currentScroll,scrollTo);
+      if (self.DOM.currentItem) {
+        var behavior = smooth !== false ? 'smooth' : 'instant';
+        var scrollTo = self.DOM.currentItem.offsetTop - self.DOM.el.clientHeight / 2;
+        var currentScroll = self.getScrollPos();
 
-      if (Math.abs(scrollTo - currentScroll) > 1) {
-        if (scrollTo <= 0) {
-          scrollTo += self.clonesHeight;
+        if (Math.abs(scrollTo - currentScroll) > 1) {
+          if (scrollTo <= 0) {
+            scrollTo += self.clonesHeight;
+          }
+
+          self.DOM.el.scrollTo({
+            top: scrollTo,
+            behavior: behavior
+          });
+          self.DOM.scrollContainer.scrollTo({
+            top: scrollTo,
+            behavior: behavior
+          });
         }
-
-        self.DOM.el.scrollTo({
-          top: scrollTo,
-          behavior: behavior
-        });
-        self.DOM.scrollContainer.scrollTo({
-          top: scrollTo,
-          behavior: behavior
-        });
       }
     }
   }, {
