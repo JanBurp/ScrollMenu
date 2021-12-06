@@ -212,9 +212,11 @@ class ScrollMenu {
                 this.DOM.wrapper.removeChild(current);
             }
             // clone active item
-            const clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
-            clone.classList.add('active-menu-item');
-            this.DOM.wrapper.appendChild(clone);
+            if ( typeof(this.DOM.menuItems[this.activeItem]) !== 'undefined' ) {
+                const clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
+                clone.classList.add('active-menu-item');
+                this.DOM.wrapper.appendChild(clone);
+            }
         }
     }
 
