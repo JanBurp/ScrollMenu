@@ -286,9 +286,11 @@ var ScrollMenu = /*#__PURE__*/function () {
         } // clone active item
 
 
-        var clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
-        clone.classList.add('active-menu-item');
-        this.DOM.wrapper.appendChild(clone);
+        if (typeof this.DOM.menuItems[this.activeItem] !== 'undefined') {
+          var clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
+          clone.classList.add('active-menu-item');
+          this.DOM.wrapper.appendChild(clone);
+        }
       }
     }
   }, {
