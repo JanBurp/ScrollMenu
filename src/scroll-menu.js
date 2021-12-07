@@ -10,12 +10,24 @@ class ScrollMenu {
     timer         = false;
     autoScroll    = false;
     scrollSpeed   = 0;
+    options       = {
+        speed         : 10,
+        wait          : 3000,
+        currentClass  : 'current-menu-item',
+        activeClass   : 'active-menu-item',
+    };
 
-    constructor(el) {
+
+    constructor(el,config) {
+
+        if ( config!==null ) {
+            this.options = {...this.options,...config};
+        }
+
         this.DOM = {wrapper: el};
         this.DOM.el = this.DOM.wrapper.querySelector('ul');
         this.DOM.menuItems = [...this.DOM.el.querySelectorAll('li')];
-        this.DOM.currentItem = this.DOM.el.querySelector('.current-menu-item');
+        this.DOM.currentItem = this.DOM.el.querySelector('.' + this.options.currentClass);
 
         this.prepareDOM();
 
@@ -27,8 +39,8 @@ class ScrollMenu {
             self.render();
             self.scrollToActiveItem(self,false)
         });
-
     }
+
 
     prepareDOM() {
         // Unique ID as wrapper
@@ -72,7 +84,7 @@ class ScrollMenu {
         // All clones height
         this.clonesHeight = totalClones * this.itemHeight;
         // Scrollable area height
-        this.scrollHeight = this.clonesHeight*2; //this.DOM.el.scrollHeight;
+        this.scrollHeight = this.clonesHeight*2;
         this.DOM.scroller.style.height = this.scrollHeight+"px";
     }
 
@@ -84,7 +96,7 @@ class ScrollMenu {
         this.DOM.scrollContainer.addEventListener('mouseenter', () => self.startAutoScroll());
         this.DOM.scrollContainer.addEventListener('mouseleave', () => self.stopAutoScroll());
         this.DOM.scrollContainer.addEventListener('click', (event) => {
-            let url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
+            let url = self.DOM.wrapper.querySelector('.'+ this.options.activeClass + ' a').getAttribute('href');
             location.href = url;
         });
     }
@@ -127,10 +139,10 @@ class ScrollMenu {
         }
 
         if ( (relativePosY > -this.itemHeight ) && (relativePosY < this.itemHeight ) ) {
-            this.DOM.wrapper.querySelector('.active-menu-item').classList.add('hover');
+            this.DOM.wrapper.querySelector('.' + this.options.activeClass).classList.add('hover');
         }
         else {
-            this.DOM.wrapper.querySelector('.active-menu-item').classList.remove('hover');
+            this.DOM.wrapper.querySelector('.' + this.options.activeClass).classList.remove('hover');
         }
     }
 
@@ -145,8 +157,8 @@ class ScrollMenu {
     scrollUpdate() {
         if (this.autoScroll) {
             let pos = this.getScrollPos();
-            let diff = this.scrollSpeed * 10;      // scroll speed factor
-            pos = (pos*100 + diff*100) / 100;     // prevent JS Maths rounding errors
+            let diff = this.scrollSpeed * this.options.speed;
+            pos = (pos*100 + diff*100) / 100; // prevent JS Maths rounding errors
             this.setScrollPos(pos);
         }
 
@@ -178,7 +190,7 @@ class ScrollMenu {
         let self = this;
         this.timer = setTimeout(function(){
             self.scrollToActiveItem(self);
-        }, 3000);
+        }, this.options.wait);
     }
 
     resetWaitTimer() {
@@ -207,14 +219,14 @@ class ScrollMenu {
         if (newActiveItem != this.activeItem) {
             this.activeItem = newActiveItem;
             // remove current active item
-            let current = this.DOM.wrapper.querySelector('.active-menu-item');
+            let current = this.DOM.wrapper.querySelector('.' + this.options.activeClass);
             if (current) {
                 this.DOM.wrapper.removeChild(current);
             }
             // clone active item
             if ( typeof(this.DOM.menuItems[this.activeItem]) !== 'undefined' ) {
                 const clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
-                clone.classList.add('active-menu-item');
+                clone.classList.add(this.options.activeClass);
                 this.DOM.wrapper.appendChild(clone);
             }
         }

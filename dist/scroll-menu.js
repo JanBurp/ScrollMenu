@@ -12,6 +12,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -21,7 +25,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var ScrollMenu = /*#__PURE__*/function () {
-  function ScrollMenu(el) {
+  function ScrollMenu(el, config) {
     _classCallCheck(this, ScrollMenu);
 
     _defineProperty(this, "DOM", {});
@@ -44,12 +48,23 @@ var ScrollMenu = /*#__PURE__*/function () {
 
     _defineProperty(this, "scrollSpeed", 0);
 
+    _defineProperty(this, "options", {
+      speed: 10,
+      wait: 3000,
+      currentClass: 'current-menu-item',
+      activeClass: 'active-menu-item'
+    });
+
+    if (config !== null) {
+      this.options = _objectSpread(_objectSpread({}, this.options), config);
+    }
+
     this.DOM = {
       wrapper: el
     };
     this.DOM.el = this.DOM.wrapper.querySelector('ul');
     this.DOM.menuItems = _toConsumableArray(this.DOM.el.querySelectorAll('li'));
-    this.DOM.currentItem = this.DOM.el.querySelector('.current-menu-item');
+    this.DOM.currentItem = this.DOM.el.querySelector('.' + this.options.currentClass);
     this.prepareDOM();
     var self = this;
     window.addEventListener("load", function () {
@@ -111,13 +126,14 @@ var ScrollMenu = /*#__PURE__*/function () {
 
       this.clonesHeight = totalClones * this.itemHeight; // Scrollable area height
 
-      this.scrollHeight = this.clonesHeight * 2; //this.DOM.el.scrollHeight;
-
+      this.scrollHeight = this.clonesHeight * 2;
       this.DOM.scroller.style.height = this.scrollHeight + "px";
     }
   }, {
     key: "initEvents",
     value: function initEvents() {
+      var _this2 = this;
+
       var self = this;
       this.timer = false;
       window.addEventListener('resize', function () {
@@ -133,7 +149,7 @@ var ScrollMenu = /*#__PURE__*/function () {
         return self.stopAutoScroll();
       });
       this.DOM.scrollContainer.addEventListener('click', function (event) {
-        var url = self.DOM.wrapper.querySelector('.active-menu-item a').getAttribute('href');
+        var url = self.DOM.wrapper.querySelector('.' + _this2.options.activeClass + ' a').getAttribute('href');
         location.href = url;
       });
     }
@@ -184,9 +200,9 @@ var ScrollMenu = /*#__PURE__*/function () {
       }
 
       if (relativePosY > -this.itemHeight && relativePosY < this.itemHeight) {
-        this.DOM.wrapper.querySelector('.active-menu-item').classList.add('hover');
+        this.DOM.wrapper.querySelector('.' + this.options.activeClass).classList.add('hover');
       } else {
-        this.DOM.wrapper.querySelector('.active-menu-item').classList.remove('hover');
+        this.DOM.wrapper.querySelector('.' + this.options.activeClass).classList.remove('hover');
       }
     }
   }, {
@@ -204,8 +220,7 @@ var ScrollMenu = /*#__PURE__*/function () {
     value: function scrollUpdate() {
       if (this.autoScroll) {
         var pos = this.getScrollPos();
-        var diff = this.scrollSpeed * 10; // scroll speed factor
-
+        var diff = this.scrollSpeed * this.options.speed;
         pos = (pos * 100 + diff * 100) / 100; // prevent JS Maths rounding errors
 
         this.setScrollPos(pos);
@@ -238,7 +253,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       var self = this;
       this.timer = setTimeout(function () {
         self.scrollToActiveItem(self);
-      }, 3000);
+      }, this.options.wait);
     }
   }, {
     key: "resetWaitTimer",
@@ -279,7 +294,7 @@ var ScrollMenu = /*#__PURE__*/function () {
       if (newActiveItem != this.activeItem) {
         this.activeItem = newActiveItem; // remove current active item
 
-        var current = this.DOM.wrapper.querySelector('.active-menu-item');
+        var current = this.DOM.wrapper.querySelector('.' + this.options.activeClass);
 
         if (current) {
           this.DOM.wrapper.removeChild(current);
@@ -288,7 +303,7 @@ var ScrollMenu = /*#__PURE__*/function () {
 
         if (typeof this.DOM.menuItems[this.activeItem] !== 'undefined') {
           var clone = this.DOM.menuItems[this.activeItem].cloneNode(true);
-          clone.classList.add('active-menu-item');
+          clone.classList.add(this.options.activeClass);
           this.DOM.wrapper.appendChild(clone);
         }
       }
@@ -296,11 +311,11 @@ var ScrollMenu = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.scrollUpdate();
       requestAnimationFrame(function () {
-        return _this2.render();
+        return _this3.render();
       });
     }
   }]);
